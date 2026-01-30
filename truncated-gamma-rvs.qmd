@@ -1,0 +1,211 @@
+---
+title: "Generating Random Variates from a Truncated Gamma Distribution Using Python"
+author: "Wade K. Copeland"
+date: last-modified
+date-format: "MMMM DD, YYYY"
+output-file: index.html
+bibliography: ./references.bib
+format:
+    html: 
+        embed-resources: true
+        code-overflow: wrap
+        page-layout: full
+        code-fold: false
+        toc: true
+        toc-location: left
+        toc-depth: 3
+        html-math-method: katex
+        code-tools:
+            source: true
+            toggle: true
+            caption: "Code Tools"
+number-sections: true
+appendix-style: plain
+engine: jupyter
+knitr:
+    opts_knit:
+        root.dir: "./"
+---
+
+# Truncated Gamma Distribution {#sec-methods}
+
+A continuous random variable $X \sim GAM(\alpha, \theta)$ if it has a probability density function (PDF) of the form in @eq-gammaPDF \[[@bain1992introduction, p. 111]\].
+
+$$
+\begin{aligned}
+f(x|\alpha, \theta) = \frac{x^{\alpha-1}e^{-x/\theta}}{\theta^\alpha \Gamma(\alpha)} \text{ } \text{ for } x, \alpha, \theta > 0 \text{ with } \\
+\Gamma(\alpha) = \int_{0}^{\infty} t^{\alpha - 1}e^{-t} dt
+\end{aligned}
+$$ {#eq-gammaPDF}
+
+For this PDF the cumulative distribution function (CDF) (a.k.a, Regularized Lower Incomplete Gamma Function) is shown in @eq-gammaCDF \[[@bain1992introduction, p. 112]\].
+
+$$
+F(x|\alpha, \theta) = \int_{0}^x f(u|\alpha, \theta) du = \frac{\gamma(\alpha, \frac{x}{\theta})}{\Gamma(\alpha)} \text { with } \gamma(\alpha, \frac{x}{\theta}) = \int_{0}^{x/\theta} t^{\alpha - 1}e^{-t} dt
+$$ {#eq-gammaCDF}
+
+The support of $x$ is $[0, \infty)$, so to create a truncated distribution we need to restrict this support to the interval $[A, B]$ with $0 \le A < B$.  This implies the following truncated PDF in @eq-gammaTPDF (e.g., $\int_{A}^{B} f_T(x)dx = 1$).
+
+$$
+f_T(x|\alpha, \theta) = \frac{f(x)}{F(B|\alpha, \theta) - F(A|\alpha, \theta)} \text{ } \forall x \in [A, B]
+$$ {#eq-gammaTPDF}
+
+For the truncated gamma distribution the first two moments are shown in @eq-gammaTm1 and @eq-gammaTm2.  Detailed derivations for each of these moments can be found in [Appendix @sec-deriv].  With the first two moments in hand, the variance follows immediately since $Var[X] = E[X^2] - (E[X])^2$ \[[@bain1992introduction, p. 74]\].
+
+$$
+E[X|A \le X \le B] = \frac{\int_{A}^{B} xf(x)dx}{\int_{A}^{B} f(x)dx} = \theta \alpha \frac{F(B|\alpha + 1, \theta) - F(A|\alpha + 1, \theta)}{F(B|\alpha, \theta) - F(A|\alpha, \theta)}
+$$ {#eq-gammaTm1}
+
+$$
+E[X^2|A \le X \le B] = \frac{\int_{A}^{B} x^2f(x)dx}{\int_{A}^{B} f(x)dx} = \theta^2(\alpha + 1)\alpha \frac{F(B|\alpha+2, \theta) - F(A|\alpha + 2, \theta)}{F(B|\alpha, \theta) - F(A|\alpha, \theta)}
+$$ {#eq-gammaTm2}
+
+# Example {#sec-example}
+
+Suppose we want to generate random variates from a **gamma distribution truncated to the interval** [0, 1000], where:
+
+- $E[X] = 100$ (mean)
+- $SD[X] = 50$ (standard deviation)
+
+We can accomplish this in Python using the **`truncated_gamma`** module (source code available in [Appendix @sec-py-source-code]).  From this module, the function **`truncgamma_rvs`** generates random variates from a truncated gamma distribution. It accepts the following arguments:
+
+- **`mean_target`**: Target mean of the truncated gamma distribution.
+- **`cv_target`**: Target coefficient of variation $CV[X] = \frac{SD[X]}{E[X]}$.
+- **`A`**: Lower bound of the distribution.
+- **`B`**: Upper bound of the distribution.
+- **`size`**: Number of random variates to generate.
+- **`random_state`**: Seed for reproducibility.  
+  - Set to an integer for consistent results.
+  - Set to `None` if reproducibility is not required
+
+```{python}
+#| label: tmp
+#| eval: true
+#| echo: true
+#| output: true
+#| warning: false
+#| message: false
+
+from truncated_gamma import truncgamma_rvs
+import matplotlib.pyplot as plt
+
+x = truncgamma_rvs(mean_target = 100, cv_target = 1/2, A = 0, B = 1000, size = 100000, random_state = 123)
+
+plt.figure(figsize=(8,5))
+plt.hist(x, bins = "fd", density = False, alpha = 0.6, color = "steelblue", edgecolor = 'white')
+plt.title(f"Histogram of X (truncated gamma [0, 1000]) with mean {round(x.mean(), 2)}\nand coefficient of variation {round(x.var()**0.5/x.mean(), 2)}")
+plt.xlabel("x")
+plt.ylabel("Frequency")
+plt.grid(True, alpha = 0.2)
+plt.show()
+```
+
+# Appendicies {#sec-appendix}
+
+## Detailed Derivations {#sec-deriv}
+
+### Derivation of the Denominator for @eq-gammaTm1 and @eq-gammaTm2 {#sec-deriv1}
+
+@thm-gammaTmDenom shows the derivation of the denominator for @eq-gammaTm1 and @eq-gammaTm2.
+
+::: {#thm-gammaTmDenom}
+$\int_{A}^{B} f(x)dx = F(B|\alpha, \theta) - F(A|\alpha, \theta)$
+:::
+
+::: {.proof}
+$\int_{A}^{B} f(x)dx = \frac{1}{\theta^{\alpha} \Gamma(\alpha)} \int_{A}^{B} x^{\alpha-1}e^{-x/\theta}$
+
+Let $t = \frac{x}{\theta} \implies x = t\theta$ and $\frac{dx}{dt} = \theta \implies dx = \theta dt$
+
+Then $\int_{A}^{B} x^{\alpha-1}e^{-x/\theta} = \int_{A/\theta}^{B/\theta} (t\theta)^{\alpha-1}e^{-t}\theta dt = \theta^{\alpha} \int_{A/\theta}^{B/\theta} t^{\alpha-1}e^{-t}dt = \theta^{\alpha} \big((\int_{0}^{B/\theta} t^{\alpha-1}e^{-t}dt) - (\int_{0}^{A/\theta} t^{\alpha-1}e^{-t}dt)\big) = \theta^{\alpha} (\gamma(\alpha, \frac{B}{\theta}) - \gamma(\alpha, \frac{A}{\theta}))$
+
+$\therefore \int_{A}^{B} f(x)dx = \frac{1}{\theta^{\alpha} \Gamma(\alpha)} (\theta^{\alpha} (\gamma(\alpha, \frac{B}{\theta}) - \gamma(\alpha, \frac{A}{\theta})) = F(B|\alpha, \theta) - F(A|\alpha, \theta)$
+:::
+
+### Derivation of the Numerator for @eq-gammaTm1 {#sec-deriv2}
+
+@thm-gammaTm1Numerator shows the derivation of the numerator for @eq-gammaTm1.  
+
+::: {#thm-gammaTm1Numerator}
+$\int_{A}^{B} xf(x)dx = \theta \alpha (F(B|\alpha+1, \theta) - F(A|\alpha+1, \theta))$
+:::
+
+::: {.proof}
+$\int_{A}^{B} xf(x)dx = \frac{1}{\theta^{\alpha} \Gamma(\alpha)} \int_{A}^{B} x^1 x^{\alpha - 1}e^{-x/\theta} = \frac{1}{\theta^{\alpha} \Gamma(\alpha)} \int_{A}^{B} x^{\alpha}e^{-x/\theta}$
+
+Let $t = \frac{x}{\theta} \implies x = t\theta$ and $\frac{dx}{dt} = \theta \implies dx = \theta dt$
+
+Then $\int_{A}^{B} x^{\alpha}e^{-x/\theta} = \int_{A/\theta}^{B/\theta} (t\theta)^{\alpha}e^{-t} \theta dt = \theta^{\alpha + 1} \int_{A/\theta}^{B/\theta} t^{\alpha} e^{-t} dt = \theta^{\alpha + 1} (\gamma(\alpha + 1, \frac{B}{\theta}) - \gamma(\alpha + 1, \frac{A}{\theta}))$
+
+Substituting this integral into the original equation we have,
+
+$\int_{A}^{B} xf(x)dx = \frac{1}{\theta^{\alpha} \Gamma(\alpha)} \theta^{\alpha + 1} (\gamma(\alpha + 1, \frac{B}{\theta}) - \gamma(\alpha + 1, \frac{A}{\theta})) = \theta \frac{\gamma(\alpha + 1, \frac{B}{\theta}) - \gamma(\alpha + 1, \frac{A}{\theta})}{\Gamma(\alpha)}$
+
+Note $\Gamma(\alpha + 1) = \alpha \Gamma(\alpha)$ \[[@bain1992introduction, p. 111]\].
+
+$\therefore \int_{A}^{B} xf(x)dx = \theta \frac{\gamma(\alpha + 1, \frac{B}{\theta}) - \gamma(\alpha + 1, \frac{A}{\theta})}{\Gamma(\alpha)} = \theta \frac{\gamma(\alpha + 1, \frac{B}{\theta}) - \gamma(\alpha + 1, \frac{A}{\theta})}{\Gamma(\alpha+1)/\alpha} = \theta \alpha (F(B|\alpha+1, \theta) - F(A|\alpha+1, \theta))$
+:::
+
+### Derivation of the Numerator for @eq-gammaTm2 {#sec-deriv3}
+
+@thm-gammaTm2Numerator shows the derivation of the numerator for @eq-gammaTm2.
+
+::: {#thm-gammaTm2Numerator}
+$\int_{A}^{B} x^2f(x)dx = \theta^2(\alpha + 1)\alpha (F(B|\alpha + 2, \theta)) - (F(A|\alpha + 1, \theta))$
+:::
+
+::: {.proof}
+$\int_{A}^{B} x^2f(x)dx = \frac{1}{\theta^{\alpha} \Gamma(\alpha)} \int_{A}^{B} x^2 x^{\alpha - 1}e^{-x/\theta} = \frac{1}{\theta^{\alpha} \Gamma(\alpha)} \int_{A}^{B} x^{\alpha + 1}e^{-x/\theta}$
+
+Let $t = \frac{x}{\theta} \implies x = t\theta$ and $\frac{dx}{dt} = \theta \implies dx = \theta dt$
+
+Then $\int_{A}^{B} x^{\alpha+1}e^{-x/\theta} = \int_{A/\theta}^{B/\theta} (t\theta)^{\alpha+1}e^{-t} \theta dt = \theta^{\alpha + 2} \int_{A/\theta}^{B/\theta} t^{\alpha + 1} e^{-t} dt = \theta^{\alpha + 2} (\gamma(\alpha + 2, \frac{B}{\theta}) - \gamma(\alpha + 2, \frac{A}{\theta}))$
+
+Substituting this integral into the original equation we have,
+
+$\int_{A}^{B} x^2f(x)dx = \frac{1}{\theta^{\alpha} \Gamma(\alpha)} \theta^{\alpha + 2} (\gamma(\alpha + 2, \frac{B}{\theta}) - \gamma(\alpha + 2, \frac{A}{\theta})) = \theta^2 \frac{\gamma(\alpha + 2, \frac{B}{\theta}) - \gamma(\alpha + 2, \frac{A}{\theta})}{\Gamma(\alpha)}$
+
+Note $\Gamma(\alpha + 2) = (\alpha+1) \alpha \Gamma(\alpha)$ \[[@bain1992introduction, p. 111]\].
+
+$\therefore \int_{A}^{B} x^2f(x)dx = \theta^2 \frac{\gamma(\alpha + 2, \frac{B}{\theta}) - \gamma(\alpha + 2, \frac{A}{\theta})}{\Gamma(\alpha+2)/(\alpha + 1)\alpha} = \theta^2(\alpha + 1)\alpha (F(B|\alpha + 2, \theta) - F(A|\alpha + 2, \theta))$
+:::
+
+## Python Source Code {#sec-py-source-code}
+
+### Module: truncated_gamma.py {#sec-truncated-gamma}
+
+```{python}
+#| label: py-TruncatedGamma
+#| eval: false
+#| echo: true
+
+{{< include ./truncated_gamma.py >}}
+
+```
+
+### Unit Tests: test_truncated_gamma.py {#sec-test-truncated-gamma}
+
+```{python}
+#| label: py-TestTruncatedGamma
+#| eval: false
+#| echo: true
+
+{{< include ./test_truncated_gamma.py >}}
+
+```
+
+## Session Information {#sec-sessioninfo}
+
+```{python}
+#| label: py-info
+#| eval: true
+#| output: true
+#| echo: false
+#| warning: false
+#| message: false
+
+import session_info
+session_info.show()
+```
+
+# References

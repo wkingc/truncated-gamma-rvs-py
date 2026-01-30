@@ -1,0 +1,1 @@
+quarto render truncated-gamma-rvs.qmd --no-cache
