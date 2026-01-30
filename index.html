@@ -2321,8 +2321,8 @@ window.Quarto = {
   </ul></li>
   <li><a href="#sec-py-source-code" id="toc-sec-py-source-code" class="nav-link" data-scroll-target="#sec-py-source-code"><span class="header-section-number">3.2</span> Python Source Code</a>
   <ul class="collapse">
-  <li><a href="#sec-truncated-gamma" id="toc-sec-truncated-gamma" class="nav-link" data-scroll-target="#sec-truncated-gamma"><span class="header-section-number">3.2.1</span> Module: truncated_gamma.py</a></li>
-  <li><a href="#sec-test-truncated-gamma" id="toc-sec-test-truncated-gamma" class="nav-link" data-scroll-target="#sec-test-truncated-gamma"><span class="header-section-number">3.2.2</span> Unit Tests: test_truncated_gamma.py</a></li>
+  <li><a href="#sec-py-truncated-gamma" id="toc-sec-py-truncated-gamma" class="nav-link" data-scroll-target="#sec-py-truncated-gamma"><span class="header-section-number">3.2.1</span> Module: truncated_gamma.py</a></li>
+  <li><a href="#sec-py-test-truncated-gamma" id="toc-sec-py-test-truncated-gamma" class="nav-link" data-scroll-target="#sec-py-test-truncated-gamma"><span class="header-section-number">3.2.2</span> Unit Tests: test_truncated_gamma.py</a></li>
   </ul></li>
   <li><a href="#sec-sessioninfo" id="toc-sec-sessioninfo" class="nav-link" data-scroll-target="#sec-sessioninfo"><span class="header-section-number">3.3</span> Session Information</a></li>
   </ul></li>
@@ -2392,17 +2392,13 @@ E[X^2|A \le X \le B] = \frac{\int_{A}^{B} x^2f(x)dx}{\int_{A}^{B} f(x)dx} = \the
 </section>
 <section id="sec-example" class="level1" data-number="2">
 <h1 data-number="2"><span class="header-section-number">2</span> Example</h1>
-<p>Suppose we want to generate random variates from a <strong>gamma distribution truncated to the interval</strong> [0, 1000], where:</p>
-<ul>
-<li><span class="math inline">E[X] = 100</span> (mean)</li>
-<li><span class="math inline">SD[X] = 50</span> (standard deviation)</li>
-</ul>
+<p>Suppose we want to generate 100,000 random variates from a <strong>gamma distribution truncated to the interval</strong> [0, 1000], where the mean is 100 and the standard deviation is 1/2 the value of the mean (e.g., the coefficient of variation).</p>
 <p>We can accomplish this in Python using the <strong><code>truncated_gamma</code></strong> module (source code available in <a href="#sec-py-source-code" class="quarto-xref">Appendix 3.2</a>). From this module, the function <strong><code>truncgamma_rvs</code></strong> generates random variates from a truncated gamma distribution. It accepts the following arguments:</p>
 <ul>
 <li><strong><code>mean_target</code></strong>: Target mean of the truncated gamma distribution.</li>
-<li><strong><code>cv_target</code></strong>: Target coefficient of variation <span class="math inline">CV[X] = \frac{SD[X]}{E[X]}</span>.</li>
-<li><strong><code>A</code></strong>: Lower bound of the distribution.</li>
-<li><strong><code>B</code></strong>: Upper bound of the distribution.</li>
+<li><strong><code>cv_target</code></strong>: Target coefficient of variation of the truncated gamma distribution.</li>
+<li><strong><code>A</code></strong>: Lower bound of the truncated gamma distribution.</li>
+<li><strong><code>B</code></strong>: Upper bound of the truncated gamma distribution.</li>
 <li><strong><code>size</code></strong>: Number of random variates to generate.</li>
 <li><strong><code>random_state</code></strong>: Seed for reproducibility.
 <ul>
@@ -2484,8 +2480,8 @@ E[X^2|A \le X \le B] = \frac{\int_{A}^{B} x^2f(x)dx}{\int_{A}^{B} f(x)dx} = \the
 </section>
 <section id="sec-py-source-code" class="level2" data-number="3.2">
 <h2 data-number="3.2" class="anchored" data-anchor-id="sec-py-source-code"><span class="header-section-number">3.2</span> Python Source Code</h2>
-<section id="sec-truncated-gamma" class="level3" data-number="3.2.1">
-<h3 data-number="3.2.1" class="anchored" data-anchor-id="sec-truncated-gamma"><span class="header-section-number">3.2.1</span> Module: truncated_gamma.py</h3>
+<section id="sec-py-truncated-gamma" class="level3" data-number="3.2.1">
+<h3 data-number="3.2.1" class="anchored" data-anchor-id="sec-py-truncated-gamma"><span class="header-section-number">3.2.1</span> Module: truncated_gamma.py</h3>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy.stats <span class="im">import</span> gamma</span>
@@ -2655,7 +2651,7 @@ E[X^2|A \le X \le B] = \frac{\int_{A}^{B} x^2f(x)dx}{\int_{A}^{B} f(x)dx} = \the
 <span id="cb2-166"><a href="#cb2-166" aria-hidden="true" tabindex="-1"></a><span class="co">        random_state (int): The seed for random number generation to create reproducible results.</span></span>
 <span id="cb2-167"><a href="#cb2-167" aria-hidden="true" tabindex="-1"></a><span class="co">     </span></span>
 <span id="cb2-168"><a href="#cb2-168" aria-hidden="true" tabindex="-1"></a><span class="co">    Returns:</span></span>
-<span id="cb2-169"><a href="#cb2-169" aria-hidden="true" tabindex="-1"></a><span class="co">        A numpy.ndarray containing the random variates.</span></span>
+<span id="cb2-169"><a href="#cb2-169" aria-hidden="true" tabindex="-1"></a><span class="co">        A numpy.ndarray containing the random variates from a truncated gamma distribution.</span></span>
 <span id="cb2-170"><a href="#cb2-170" aria-hidden="true" tabindex="-1"></a><span class="co">    </span></span>
 <span id="cb2-171"><a href="#cb2-171" aria-hidden="true" tabindex="-1"></a><span class="co">    Example:</span></span>
 <span id="cb2-172"><a href="#cb2-172" aria-hidden="true" tabindex="-1"></a><span class="co">        &gt;&gt;&gt; x = truncgamma_rvs(mean_target = 100, cv_target = 1/2, A = 0, B = 1000, size = 10, random_state = 123)</span></span>
@@ -2691,8 +2687,9 @@ E[X^2|A \le X \le B] = \frac{\int_{A}^{B} x^2f(x)dx}{\int_{A}^{B} f(x)dx} = \the
 <span id="cb2-202"><a href="#cb2-202" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> res</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
-<section id="sec-test-truncated-gamma" class="level3" data-number="3.2.2">
-<h3 data-number="3.2.2" class="anchored" data-anchor-id="sec-test-truncated-gamma"><span class="header-section-number">3.2.2</span> Unit Tests: test_truncated_gamma.py</h3>
+<section id="sec-py-test-truncated-gamma" class="level3" data-number="3.2.2">
+<h3 data-number="3.2.2" class="anchored" data-anchor-id="sec-py-test-truncated-gamma"><span class="header-section-number">3.2.2</span> Unit Tests: test_truncated_gamma.py</h3>
+<p>Unit tests for the <code>truncated_gamma</code> module are provided in the file <code>test_truncated_gamma.py</code>.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> truncated_gamma <span class="im">import</span> TruncatedGamma, truncgamma_rvs</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
@@ -2745,6 +2742,7 @@ E[X^2|A \le X \le B] = \frac{\int_{A}^{B} x^2f(x)dx}{\int_{A}^{B} f(x)dx} = \the
 </section>
 <section id="sec-sessioninfo" class="level2" data-number="3.3">
 <h2 data-number="3.3" class="anchored" data-anchor-id="sec-sessioninfo"><span class="header-section-number">3.3</span> Session Information</h2>
+<p>All of the files needed to reproduce these results can be downloaded from the Git repository <a href="https://github.com/wkingc/truncated-gamma-rvs-py" class="uri">https://github.com/wkingc/truncated-gamma-rvs-py</a>.</p>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
 <pre><code>-----
@@ -2755,7 +2753,7 @@ truncated_gamma     NA
 Python 3.14.2 (main, Dec  5 2025, 16:49:16) [Clang 17.0.0 (clang-1700.6.3.2)]
 macOS-26.2-arm64-arm-64bit-Mach-O
 -----
-Session information updated at 2026-01-30 09:47</code></pre>
+Session information updated at 2026-01-30 12:38</code></pre>
 </div>
 </div>
 </section>
@@ -3288,153 +3286,154 @@ Bain, Lee J, and Max Engelhardt. 1992. <em><span class="nocase">Introduction to 
 <span id="cb5-62"><a href="#cb5-62" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-63"><a href="#cb5-63" aria-hidden="true" tabindex="-1"></a><span class="fu"># Example {#sec-example}</span></span>
 <span id="cb5-64"><a href="#cb5-64" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-65"><a href="#cb5-65" aria-hidden="true" tabindex="-1"></a>Suppose we want to generate random variates from a **gamma distribution truncated to the interval** <span class="co">[</span><span class="ot">0, 1000</span><span class="co">]</span>, where:</span>
+<span id="cb5-65"><a href="#cb5-65" aria-hidden="true" tabindex="-1"></a>Suppose we want to generate 100,000 random variates from a **gamma distribution truncated to the interval** <span class="co">[</span><span class="ot">0, 1000</span><span class="co">]</span>, where the mean is 100 and the standard deviation is 1/2 the value of the mean (e.g., the coefficient of variation).</span>
 <span id="cb5-66"><a href="#cb5-66" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-67"><a href="#cb5-67" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>$E<span class="co">[</span><span class="ot">X</span><span class="co">]</span> = 100$ (mean)</span>
-<span id="cb5-68"><a href="#cb5-68" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>$SD<span class="co">[</span><span class="ot">X</span><span class="co">]</span> = 50$ (standard deviation)</span>
-<span id="cb5-69"><a href="#cb5-69" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-70"><a href="#cb5-70" aria-hidden="true" tabindex="-1"></a>We can accomplish this in Python using the **`truncated_gamma`** module (source code available in [Appendix @sec-py-source-code]).  From this module, the function **`truncgamma_rvs`** generates random variates from a truncated gamma distribution. It accepts the following arguments:</span>
-<span id="cb5-71"><a href="#cb5-71" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-72"><a href="#cb5-72" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`mean_target`**: Target mean of the truncated gamma distribution.</span>
-<span id="cb5-73"><a href="#cb5-73" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`cv_target`**: Target coefficient of variation $CV<span class="co">[</span><span class="ot">X</span><span class="co">]</span> = \frac{SD<span class="co">[</span><span class="ot">X</span><span class="co">]</span>}{E<span class="co">[</span><span class="ot">X</span><span class="co">]</span>}$.</span>
-<span id="cb5-74"><a href="#cb5-74" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`A`**: Lower bound of the distribution.</span>
-<span id="cb5-75"><a href="#cb5-75" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`B`**: Upper bound of the distribution.</span>
-<span id="cb5-76"><a href="#cb5-76" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`size`**: Number of random variates to generate.</span>
-<span id="cb5-77"><a href="#cb5-77" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`random_state`**: Seed for reproducibility.  </span>
-<span id="cb5-78"><a href="#cb5-78" aria-hidden="true" tabindex="-1"></a><span class="ss">  - </span>Set to an integer for consistent results.</span>
-<span id="cb5-79"><a href="#cb5-79" aria-hidden="true" tabindex="-1"></a><span class="ss">  - </span>Set to <span class="in">`None`</span> if reproducibility is not required</span>
-<span id="cb5-80"><a href="#cb5-80" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-83"><a href="#cb5-83" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb5-84"><a href="#cb5-84" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: tgamma-rvs</span></span>
-<span id="cb5-85"><a href="#cb5-85" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: true</span></span>
-<span id="cb5-86"><a href="#cb5-86" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: true</span></span>
-<span id="cb5-87"><a href="#cb5-87" aria-hidden="true" tabindex="-1"></a><span class="co">#| output: true</span></span>
-<span id="cb5-88"><a href="#cb5-88" aria-hidden="true" tabindex="-1"></a><span class="co">#| warning: false</span></span>
-<span id="cb5-89"><a href="#cb5-89" aria-hidden="true" tabindex="-1"></a><span class="co">#| message: false</span></span>
+<span id="cb5-67"><a href="#cb5-67" aria-hidden="true" tabindex="-1"></a>We can accomplish this in Python using the **`truncated_gamma`** module (source code available in [Appendix @sec-py-source-code]).  From this module, the function **`truncgamma_rvs`** generates random variates from a truncated gamma distribution. It accepts the following arguments:</span>
+<span id="cb5-68"><a href="#cb5-68" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-69"><a href="#cb5-69" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`mean_target`**: Target mean of the truncated gamma distribution.</span>
+<span id="cb5-70"><a href="#cb5-70" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`cv_target`**: Target coefficient of variation of the truncated gamma distribution.</span>
+<span id="cb5-71"><a href="#cb5-71" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`A`**: Lower bound of the truncated gamma distribution.</span>
+<span id="cb5-72"><a href="#cb5-72" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`B`**: Upper bound of the truncated gamma distribution.</span>
+<span id="cb5-73"><a href="#cb5-73" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`size`**: Number of random variates to generate.</span>
+<span id="cb5-74"><a href="#cb5-74" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`random_state`**: Seed for reproducibility.  </span>
+<span id="cb5-75"><a href="#cb5-75" aria-hidden="true" tabindex="-1"></a><span class="ss">  - </span>Set to an integer for consistent results.</span>
+<span id="cb5-76"><a href="#cb5-76" aria-hidden="true" tabindex="-1"></a><span class="ss">  - </span>Set to <span class="in">`None`</span> if reproducibility is not required</span>
+<span id="cb5-77"><a href="#cb5-77" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-80"><a href="#cb5-80" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb5-81"><a href="#cb5-81" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: tgamma-rvs</span></span>
+<span id="cb5-82"><a href="#cb5-82" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: true</span></span>
+<span id="cb5-83"><a href="#cb5-83" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: true</span></span>
+<span id="cb5-84"><a href="#cb5-84" aria-hidden="true" tabindex="-1"></a><span class="co">#| output: true</span></span>
+<span id="cb5-85"><a href="#cb5-85" aria-hidden="true" tabindex="-1"></a><span class="co">#| warning: false</span></span>
+<span id="cb5-86"><a href="#cb5-86" aria-hidden="true" tabindex="-1"></a><span class="co">#| message: false</span></span>
+<span id="cb5-87"><a href="#cb5-87" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-88"><a href="#cb5-88" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> truncated_gamma <span class="im">import</span> truncgamma_rvs</span>
+<span id="cb5-89"><a href="#cb5-89" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
 <span id="cb5-90"><a href="#cb5-90" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-91"><a href="#cb5-91" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> truncated_gamma <span class="im">import</span> truncgamma_rvs</span>
-<span id="cb5-92"><a href="#cb5-92" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
-<span id="cb5-93"><a href="#cb5-93" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-94"><a href="#cb5-94" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> truncgamma_rvs(mean_target <span class="op">=</span> <span class="dv">100</span>, cv_target <span class="op">=</span> <span class="dv">1</span><span class="op">/</span><span class="dv">2</span>, A <span class="op">=</span> <span class="dv">0</span>, B <span class="op">=</span> <span class="dv">1000</span>, size <span class="op">=</span> <span class="dv">100000</span>, random_state <span class="op">=</span> <span class="dv">123</span>)</span>
-<span id="cb5-95"><a href="#cb5-95" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-96"><a href="#cb5-96" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">8</span>,<span class="dv">5</span>))</span>
-<span id="cb5-97"><a href="#cb5-97" aria-hidden="true" tabindex="-1"></a>plt.hist(x, bins <span class="op">=</span> <span class="st">&quot;fd&quot;</span>, density <span class="op">=</span> <span class="va">False</span>, alpha <span class="op">=</span> <span class="fl">0.6</span>, color <span class="op">=</span> <span class="st">&quot;steelblue&quot;</span>, edgecolor <span class="op">=</span> <span class="st">&#39;white&#39;</span>)</span>
-<span id="cb5-98"><a href="#cb5-98" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="ss">f&quot;Histogram of X (truncated gamma [0, 1000]) with mean </span><span class="sc">{</span><span class="bu">round</span>(x.mean(), <span class="dv">2</span>)<span class="sc">}</span><span class="ch">\n</span><span class="ss">and coefficient of variation </span><span class="sc">{</span><span class="bu">round</span>(x.var()<span class="op">**</span><span class="fl">0.5</span><span class="op">/</span>x.mean(), <span class="dv">2</span>)<span class="sc">}</span><span class="ss">&quot;</span>)</span>
-<span id="cb5-99"><a href="#cb5-99" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">&quot;x&quot;</span>)</span>
-<span id="cb5-100"><a href="#cb5-100" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">&quot;Frequency&quot;</span>)</span>
-<span id="cb5-101"><a href="#cb5-101" aria-hidden="true" tabindex="-1"></a>plt.grid(<span class="va">True</span>, alpha <span class="op">=</span> <span class="fl">0.2</span>)</span>
-<span id="cb5-102"><a href="#cb5-102" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
-<span id="cb5-103"><a href="#cb5-103" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb5-104"><a href="#cb5-104" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-105"><a href="#cb5-105" aria-hidden="true" tabindex="-1"></a><span class="fu"># Appendicies {#sec-appendix}</span></span>
-<span id="cb5-106"><a href="#cb5-106" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-107"><a href="#cb5-107" aria-hidden="true" tabindex="-1"></a><span class="fu">## Detailed Derivations {#sec-deriv}</span></span>
-<span id="cb5-108"><a href="#cb5-108" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-109"><a href="#cb5-109" aria-hidden="true" tabindex="-1"></a><span class="fu">### Derivation of the Denominator for @eq-gammaTm1 and @eq-gammaTm2 {#sec-deriv1}</span></span>
-<span id="cb5-110"><a href="#cb5-110" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-111"><a href="#cb5-111" aria-hidden="true" tabindex="-1"></a>@thm-gammaTmDenom shows the derivation of the denominator for @eq-gammaTm1 and @eq-gammaTm2.</span>
-<span id="cb5-112"><a href="#cb5-112" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-113"><a href="#cb5-113" aria-hidden="true" tabindex="-1"></a>::: {#thm-gammaTmDenom}</span>
-<span id="cb5-114"><a href="#cb5-114" aria-hidden="true" tabindex="-1"></a>$\int_{A}^{B} f(x)dx = F(B|\alpha, \theta) - F(A|\alpha, \theta)$</span>
-<span id="cb5-115"><a href="#cb5-115" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb5-91"><a href="#cb5-91" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> truncgamma_rvs(mean_target <span class="op">=</span> <span class="dv">100</span>, cv_target <span class="op">=</span> <span class="dv">1</span><span class="op">/</span><span class="dv">2</span>, A <span class="op">=</span> <span class="dv">0</span>, B <span class="op">=</span> <span class="dv">1000</span>, size <span class="op">=</span> <span class="dv">100000</span>, random_state <span class="op">=</span> <span class="dv">123</span>)</span>
+<span id="cb5-92"><a href="#cb5-92" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-93"><a href="#cb5-93" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">8</span>,<span class="dv">5</span>))</span>
+<span id="cb5-94"><a href="#cb5-94" aria-hidden="true" tabindex="-1"></a>plt.hist(x, bins <span class="op">=</span> <span class="st">&quot;fd&quot;</span>, density <span class="op">=</span> <span class="va">False</span>, alpha <span class="op">=</span> <span class="fl">0.6</span>, color <span class="op">=</span> <span class="st">&quot;steelblue&quot;</span>, edgecolor <span class="op">=</span> <span class="st">&#39;white&#39;</span>)</span>
+<span id="cb5-95"><a href="#cb5-95" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="ss">f&quot;Histogram of X (truncated gamma [0, 1000]) with mean </span><span class="sc">{</span><span class="bu">round</span>(x.mean(), <span class="dv">2</span>)<span class="sc">}</span><span class="ch">\n</span><span class="ss">and coefficient of variation </span><span class="sc">{</span><span class="bu">round</span>(x.var()<span class="op">**</span><span class="fl">0.5</span><span class="op">/</span>x.mean(), <span class="dv">2</span>)<span class="sc">}</span><span class="ss">&quot;</span>)</span>
+<span id="cb5-96"><a href="#cb5-96" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">&quot;x&quot;</span>)</span>
+<span id="cb5-97"><a href="#cb5-97" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">&quot;Frequency&quot;</span>)</span>
+<span id="cb5-98"><a href="#cb5-98" aria-hidden="true" tabindex="-1"></a>plt.grid(<span class="va">True</span>, alpha <span class="op">=</span> <span class="fl">0.2</span>)</span>
+<span id="cb5-99"><a href="#cb5-99" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
+<span id="cb5-100"><a href="#cb5-100" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb5-101"><a href="#cb5-101" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-102"><a href="#cb5-102" aria-hidden="true" tabindex="-1"></a><span class="fu"># Appendicies {#sec-appendix}</span></span>
+<span id="cb5-103"><a href="#cb5-103" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-104"><a href="#cb5-104" aria-hidden="true" tabindex="-1"></a><span class="fu">## Detailed Derivations {#sec-deriv}</span></span>
+<span id="cb5-105"><a href="#cb5-105" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-106"><a href="#cb5-106" aria-hidden="true" tabindex="-1"></a><span class="fu">### Derivation of the Denominator for @eq-gammaTm1 and @eq-gammaTm2 {#sec-deriv1}</span></span>
+<span id="cb5-107"><a href="#cb5-107" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-108"><a href="#cb5-108" aria-hidden="true" tabindex="-1"></a>@thm-gammaTmDenom shows the derivation of the denominator for @eq-gammaTm1 and @eq-gammaTm2.</span>
+<span id="cb5-109"><a href="#cb5-109" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-110"><a href="#cb5-110" aria-hidden="true" tabindex="-1"></a>::: {#thm-gammaTmDenom}</span>
+<span id="cb5-111"><a href="#cb5-111" aria-hidden="true" tabindex="-1"></a>$\int_{A}^{B} f(x)dx = F(B|\alpha, \theta) - F(A|\alpha, \theta)$</span>
+<span id="cb5-112"><a href="#cb5-112" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb5-113"><a href="#cb5-113" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-114"><a href="#cb5-114" aria-hidden="true" tabindex="-1"></a>::: {.proof}</span>
+<span id="cb5-115"><a href="#cb5-115" aria-hidden="true" tabindex="-1"></a>$\int_{A}^{B} f(x)dx = \frac{1}{\theta^{\alpha} \Gamma(\alpha)} \int_{A}^{B} x^{\alpha-1}e^{-x/\theta}$</span>
 <span id="cb5-116"><a href="#cb5-116" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-117"><a href="#cb5-117" aria-hidden="true" tabindex="-1"></a>::: {.proof}</span>
-<span id="cb5-118"><a href="#cb5-118" aria-hidden="true" tabindex="-1"></a>$\int_{A}^{B} f(x)dx = \frac{1}{\theta^{\alpha} \Gamma(\alpha)} \int_{A}^{B} x^{\alpha-1}e^{-x/\theta}$</span>
-<span id="cb5-119"><a href="#cb5-119" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-120"><a href="#cb5-120" aria-hidden="true" tabindex="-1"></a>Let $t = \frac{x}{\theta} \implies x = t\theta$ and $\frac{dx}{dt} = \theta \implies dx = \theta dt$</span>
-<span id="cb5-121"><a href="#cb5-121" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-122"><a href="#cb5-122" aria-hidden="true" tabindex="-1"></a>Then $\int_{A}^{B} x^{\alpha-1}e^{-x/\theta} = \int_{A/\theta}^{B/\theta} (t\theta)^{\alpha-1}e^{-t}\theta dt = \theta^{\alpha} \int_{A/\theta}^{B/\theta} t^{\alpha-1}e^{-t}dt = \theta^{\alpha} \big((\int_{0}^{B/\theta} t^{\alpha-1}e^{-t}dt) - (\int_{0}^{A/\theta} t^{\alpha-1}e^{-t}dt)\big) = \theta^{\alpha} (\gamma(\alpha, \frac{B}{\theta}) - \gamma(\alpha, \frac{A}{\theta}))$</span>
+<span id="cb5-117"><a href="#cb5-117" aria-hidden="true" tabindex="-1"></a>Let $t = \frac{x}{\theta} \implies x = t\theta$ and $\frac{dx}{dt} = \theta \implies dx = \theta dt$</span>
+<span id="cb5-118"><a href="#cb5-118" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-119"><a href="#cb5-119" aria-hidden="true" tabindex="-1"></a>Then $\int_{A}^{B} x^{\alpha-1}e^{-x/\theta} = \int_{A/\theta}^{B/\theta} (t\theta)^{\alpha-1}e^{-t}\theta dt = \theta^{\alpha} \int_{A/\theta}^{B/\theta} t^{\alpha-1}e^{-t}dt = \theta^{\alpha} \big((\int_{0}^{B/\theta} t^{\alpha-1}e^{-t}dt) - (\int_{0}^{A/\theta} t^{\alpha-1}e^{-t}dt)\big) = \theta^{\alpha} (\gamma(\alpha, \frac{B}{\theta}) - \gamma(\alpha, \frac{A}{\theta}))$</span>
+<span id="cb5-120"><a href="#cb5-120" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-121"><a href="#cb5-121" aria-hidden="true" tabindex="-1"></a>$\therefore \int_{A}^{B} f(x)dx = \frac{1}{\theta^{\alpha} \Gamma(\alpha)} (\theta^{\alpha} (\gamma(\alpha, \frac{B}{\theta}) - \gamma(\alpha, \frac{A}{\theta})) = F(B|\alpha, \theta) - F(A|\alpha, \theta)$</span>
+<span id="cb5-122"><a href="#cb5-122" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb5-123"><a href="#cb5-123" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-124"><a href="#cb5-124" aria-hidden="true" tabindex="-1"></a>$\therefore \int_{A}^{B} f(x)dx = \frac{1}{\theta^{\alpha} \Gamma(\alpha)} (\theta^{\alpha} (\gamma(\alpha, \frac{B}{\theta}) - \gamma(\alpha, \frac{A}{\theta})) = F(B|\alpha, \theta) - F(A|\alpha, \theta)$</span>
-<span id="cb5-125"><a href="#cb5-125" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb5-126"><a href="#cb5-126" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-127"><a href="#cb5-127" aria-hidden="true" tabindex="-1"></a><span class="fu">### Derivation of the Numerator for @eq-gammaTm1 {#sec-deriv2}</span></span>
-<span id="cb5-128"><a href="#cb5-128" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-129"><a href="#cb5-129" aria-hidden="true" tabindex="-1"></a>@thm-gammaTm1Numerator shows the derivation of the numerator for @eq-gammaTm1.  </span>
-<span id="cb5-130"><a href="#cb5-130" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-131"><a href="#cb5-131" aria-hidden="true" tabindex="-1"></a>::: {#thm-gammaTm1Numerator}</span>
-<span id="cb5-132"><a href="#cb5-132" aria-hidden="true" tabindex="-1"></a>$\int_{A}^{B} xf(x)dx = \theta \alpha (F(B|\alpha+1, \theta) - F(A|\alpha+1, \theta))$</span>
-<span id="cb5-133"><a href="#cb5-133" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb5-124"><a href="#cb5-124" aria-hidden="true" tabindex="-1"></a><span class="fu">### Derivation of the Numerator for @eq-gammaTm1 {#sec-deriv2}</span></span>
+<span id="cb5-125"><a href="#cb5-125" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-126"><a href="#cb5-126" aria-hidden="true" tabindex="-1"></a>@thm-gammaTm1Numerator shows the derivation of the numerator for @eq-gammaTm1.  </span>
+<span id="cb5-127"><a href="#cb5-127" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-128"><a href="#cb5-128" aria-hidden="true" tabindex="-1"></a>::: {#thm-gammaTm1Numerator}</span>
+<span id="cb5-129"><a href="#cb5-129" aria-hidden="true" tabindex="-1"></a>$\int_{A}^{B} xf(x)dx = \theta \alpha (F(B|\alpha+1, \theta) - F(A|\alpha+1, \theta))$</span>
+<span id="cb5-130"><a href="#cb5-130" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb5-131"><a href="#cb5-131" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-132"><a href="#cb5-132" aria-hidden="true" tabindex="-1"></a>::: {.proof}</span>
+<span id="cb5-133"><a href="#cb5-133" aria-hidden="true" tabindex="-1"></a>$\int_{A}^{B} xf(x)dx = \frac{1}{\theta^{\alpha} \Gamma(\alpha)} \int_{A}^{B} x^1 x^{\alpha - 1}e^{-x/\theta} = \frac{1}{\theta^{\alpha} \Gamma(\alpha)} \int_{A}^{B} x^{\alpha}e^{-x/\theta}$</span>
 <span id="cb5-134"><a href="#cb5-134" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-135"><a href="#cb5-135" aria-hidden="true" tabindex="-1"></a>::: {.proof}</span>
-<span id="cb5-136"><a href="#cb5-136" aria-hidden="true" tabindex="-1"></a>$\int_{A}^{B} xf(x)dx = \frac{1}{\theta^{\alpha} \Gamma(\alpha)} \int_{A}^{B} x^1 x^{\alpha - 1}e^{-x/\theta} = \frac{1}{\theta^{\alpha} \Gamma(\alpha)} \int_{A}^{B} x^{\alpha}e^{-x/\theta}$</span>
-<span id="cb5-137"><a href="#cb5-137" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-138"><a href="#cb5-138" aria-hidden="true" tabindex="-1"></a>Let $t = \frac{x}{\theta} \implies x = t\theta$ and $\frac{dx}{dt} = \theta \implies dx = \theta dt$</span>
-<span id="cb5-139"><a href="#cb5-139" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-140"><a href="#cb5-140" aria-hidden="true" tabindex="-1"></a>Then $\int_{A}^{B} x^{\alpha}e^{-x/\theta} = \int_{A/\theta}^{B/\theta} (t\theta)^{\alpha}e^{-t} \theta dt = \theta^{\alpha + 1} \int_{A/\theta}^{B/\theta} t^{\alpha} e^{-t} dt = \theta^{\alpha + 1} (\gamma(\alpha + 1, \frac{B}{\theta}) - \gamma(\alpha + 1, \frac{A}{\theta}))$</span>
-<span id="cb5-141"><a href="#cb5-141" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-142"><a href="#cb5-142" aria-hidden="true" tabindex="-1"></a>Substituting this integral into the original equation we have,</span>
-<span id="cb5-143"><a href="#cb5-143" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-144"><a href="#cb5-144" aria-hidden="true" tabindex="-1"></a>$\int_{A}^{B} xf(x)dx = \frac{1}{\theta^{\alpha} \Gamma(\alpha)} \theta^{\alpha + 1} (\gamma(\alpha + 1, \frac{B}{\theta}) - \gamma(\alpha + 1, \frac{A}{\theta})) = \theta \frac{\gamma(\alpha + 1, \frac{B}{\theta}) - \gamma(\alpha + 1, \frac{A}{\theta})}{\Gamma(\alpha)}$</span>
-<span id="cb5-145"><a href="#cb5-145" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-146"><a href="#cb5-146" aria-hidden="true" tabindex="-1"></a>Note $\Gamma(\alpha + 1) = \alpha \Gamma(\alpha)$ <span class="sc">\[</span><span class="co">[</span><span class="ot">@bain1992introduction, p. 111</span><span class="co">]</span><span class="sc">\]</span>.</span>
+<span id="cb5-135"><a href="#cb5-135" aria-hidden="true" tabindex="-1"></a>Let $t = \frac{x}{\theta} \implies x = t\theta$ and $\frac{dx}{dt} = \theta \implies dx = \theta dt$</span>
+<span id="cb5-136"><a href="#cb5-136" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-137"><a href="#cb5-137" aria-hidden="true" tabindex="-1"></a>Then $\int_{A}^{B} x^{\alpha}e^{-x/\theta} = \int_{A/\theta}^{B/\theta} (t\theta)^{\alpha}e^{-t} \theta dt = \theta^{\alpha + 1} \int_{A/\theta}^{B/\theta} t^{\alpha} e^{-t} dt = \theta^{\alpha + 1} (\gamma(\alpha + 1, \frac{B}{\theta}) - \gamma(\alpha + 1, \frac{A}{\theta}))$</span>
+<span id="cb5-138"><a href="#cb5-138" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-139"><a href="#cb5-139" aria-hidden="true" tabindex="-1"></a>Substituting this integral into the original equation we have,</span>
+<span id="cb5-140"><a href="#cb5-140" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-141"><a href="#cb5-141" aria-hidden="true" tabindex="-1"></a>$\int_{A}^{B} xf(x)dx = \frac{1}{\theta^{\alpha} \Gamma(\alpha)} \theta^{\alpha + 1} (\gamma(\alpha + 1, \frac{B}{\theta}) - \gamma(\alpha + 1, \frac{A}{\theta})) = \theta \frac{\gamma(\alpha + 1, \frac{B}{\theta}) - \gamma(\alpha + 1, \frac{A}{\theta})}{\Gamma(\alpha)}$</span>
+<span id="cb5-142"><a href="#cb5-142" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-143"><a href="#cb5-143" aria-hidden="true" tabindex="-1"></a>Note $\Gamma(\alpha + 1) = \alpha \Gamma(\alpha)$ <span class="sc">\[</span><span class="co">[</span><span class="ot">@bain1992introduction, p. 111</span><span class="co">]</span><span class="sc">\]</span>.</span>
+<span id="cb5-144"><a href="#cb5-144" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-145"><a href="#cb5-145" aria-hidden="true" tabindex="-1"></a>$\therefore \int_{A}^{B} xf(x)dx = \theta \frac{\gamma(\alpha + 1, \frac{B}{\theta}) - \gamma(\alpha + 1, \frac{A}{\theta})}{\Gamma(\alpha)} = \theta \frac{\gamma(\alpha + 1, \frac{B}{\theta}) - \gamma(\alpha + 1, \frac{A}{\theta})}{\Gamma(\alpha+1)/\alpha} = \theta \alpha (F(B|\alpha+1, \theta) - F(A|\alpha+1, \theta))$</span>
+<span id="cb5-146"><a href="#cb5-146" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb5-147"><a href="#cb5-147" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-148"><a href="#cb5-148" aria-hidden="true" tabindex="-1"></a>$\therefore \int_{A}^{B} xf(x)dx = \theta \frac{\gamma(\alpha + 1, \frac{B}{\theta}) - \gamma(\alpha + 1, \frac{A}{\theta})}{\Gamma(\alpha)} = \theta \frac{\gamma(\alpha + 1, \frac{B}{\theta}) - \gamma(\alpha + 1, \frac{A}{\theta})}{\Gamma(\alpha+1)/\alpha} = \theta \alpha (F(B|\alpha+1, \theta) - F(A|\alpha+1, \theta))$</span>
-<span id="cb5-149"><a href="#cb5-149" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb5-150"><a href="#cb5-150" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-151"><a href="#cb5-151" aria-hidden="true" tabindex="-1"></a><span class="fu">### Derivation of the Numerator for @eq-gammaTm2 {#sec-deriv3}</span></span>
-<span id="cb5-152"><a href="#cb5-152" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-153"><a href="#cb5-153" aria-hidden="true" tabindex="-1"></a>@thm-gammaTm2Numerator shows the derivation of the numerator for @eq-gammaTm2.</span>
-<span id="cb5-154"><a href="#cb5-154" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-155"><a href="#cb5-155" aria-hidden="true" tabindex="-1"></a>::: {#thm-gammaTm2Numerator}</span>
-<span id="cb5-156"><a href="#cb5-156" aria-hidden="true" tabindex="-1"></a>$\int_{A}^{B} x^2f(x)dx = \theta^2(\alpha + 1)\alpha (F(B|\alpha + 2, \theta)) - (F(A|\alpha + 1, \theta))$</span>
-<span id="cb5-157"><a href="#cb5-157" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb5-148"><a href="#cb5-148" aria-hidden="true" tabindex="-1"></a><span class="fu">### Derivation of the Numerator for @eq-gammaTm2 {#sec-deriv3}</span></span>
+<span id="cb5-149"><a href="#cb5-149" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-150"><a href="#cb5-150" aria-hidden="true" tabindex="-1"></a>@thm-gammaTm2Numerator shows the derivation of the numerator for @eq-gammaTm2.</span>
+<span id="cb5-151"><a href="#cb5-151" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-152"><a href="#cb5-152" aria-hidden="true" tabindex="-1"></a>::: {#thm-gammaTm2Numerator}</span>
+<span id="cb5-153"><a href="#cb5-153" aria-hidden="true" tabindex="-1"></a>$\int_{A}^{B} x^2f(x)dx = \theta^2(\alpha + 1)\alpha (F(B|\alpha + 2, \theta)) - (F(A|\alpha + 1, \theta))$</span>
+<span id="cb5-154"><a href="#cb5-154" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb5-155"><a href="#cb5-155" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-156"><a href="#cb5-156" aria-hidden="true" tabindex="-1"></a>::: {.proof}</span>
+<span id="cb5-157"><a href="#cb5-157" aria-hidden="true" tabindex="-1"></a>$\int_{A}^{B} x^2f(x)dx = \frac{1}{\theta^{\alpha} \Gamma(\alpha)} \int_{A}^{B} x^2 x^{\alpha - 1}e^{-x/\theta} = \frac{1}{\theta^{\alpha} \Gamma(\alpha)} \int_{A}^{B} x^{\alpha + 1}e^{-x/\theta}$</span>
 <span id="cb5-158"><a href="#cb5-158" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-159"><a href="#cb5-159" aria-hidden="true" tabindex="-1"></a>::: {.proof}</span>
-<span id="cb5-160"><a href="#cb5-160" aria-hidden="true" tabindex="-1"></a>$\int_{A}^{B} x^2f(x)dx = \frac{1}{\theta^{\alpha} \Gamma(\alpha)} \int_{A}^{B} x^2 x^{\alpha - 1}e^{-x/\theta} = \frac{1}{\theta^{\alpha} \Gamma(\alpha)} \int_{A}^{B} x^{\alpha + 1}e^{-x/\theta}$</span>
-<span id="cb5-161"><a href="#cb5-161" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-162"><a href="#cb5-162" aria-hidden="true" tabindex="-1"></a>Let $t = \frac{x}{\theta} \implies x = t\theta$ and $\frac{dx}{dt} = \theta \implies dx = \theta dt$</span>
-<span id="cb5-163"><a href="#cb5-163" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-164"><a href="#cb5-164" aria-hidden="true" tabindex="-1"></a>Then $\int_{A}^{B} x^{\alpha+1}e^{-x/\theta} = \int_{A/\theta}^{B/\theta} (t\theta)^{\alpha+1}e^{-t} \theta dt = \theta^{\alpha + 2} \int_{A/\theta}^{B/\theta} t^{\alpha + 1} e^{-t} dt = \theta^{\alpha + 2} (\gamma(\alpha + 2, \frac{B}{\theta}) - \gamma(\alpha + 2, \frac{A}{\theta}))$</span>
-<span id="cb5-165"><a href="#cb5-165" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-166"><a href="#cb5-166" aria-hidden="true" tabindex="-1"></a>Substituting this integral into the original equation we have,</span>
-<span id="cb5-167"><a href="#cb5-167" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-168"><a href="#cb5-168" aria-hidden="true" tabindex="-1"></a>$\int_{A}^{B} x^2f(x)dx = \frac{1}{\theta^{\alpha} \Gamma(\alpha)} \theta^{\alpha + 2} (\gamma(\alpha + 2, \frac{B}{\theta}) - \gamma(\alpha + 2, \frac{A}{\theta})) = \theta^2 \frac{\gamma(\alpha + 2, \frac{B}{\theta}) - \gamma(\alpha + 2, \frac{A}{\theta})}{\Gamma(\alpha)}$</span>
-<span id="cb5-169"><a href="#cb5-169" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-170"><a href="#cb5-170" aria-hidden="true" tabindex="-1"></a>Note $\Gamma(\alpha + 2) = (\alpha+1) \alpha \Gamma(\alpha)$ <span class="sc">\[</span><span class="co">[</span><span class="ot">@bain1992introduction, p. 111</span><span class="co">]</span><span class="sc">\]</span>.</span>
+<span id="cb5-159"><a href="#cb5-159" aria-hidden="true" tabindex="-1"></a>Let $t = \frac{x}{\theta} \implies x = t\theta$ and $\frac{dx}{dt} = \theta \implies dx = \theta dt$</span>
+<span id="cb5-160"><a href="#cb5-160" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-161"><a href="#cb5-161" aria-hidden="true" tabindex="-1"></a>Then $\int_{A}^{B} x^{\alpha+1}e^{-x/\theta} = \int_{A/\theta}^{B/\theta} (t\theta)^{\alpha+1}e^{-t} \theta dt = \theta^{\alpha + 2} \int_{A/\theta}^{B/\theta} t^{\alpha + 1} e^{-t} dt = \theta^{\alpha + 2} (\gamma(\alpha + 2, \frac{B}{\theta}) - \gamma(\alpha + 2, \frac{A}{\theta}))$</span>
+<span id="cb5-162"><a href="#cb5-162" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-163"><a href="#cb5-163" aria-hidden="true" tabindex="-1"></a>Substituting this integral into the original equation we have,</span>
+<span id="cb5-164"><a href="#cb5-164" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-165"><a href="#cb5-165" aria-hidden="true" tabindex="-1"></a>$\int_{A}^{B} x^2f(x)dx = \frac{1}{\theta^{\alpha} \Gamma(\alpha)} \theta^{\alpha + 2} (\gamma(\alpha + 2, \frac{B}{\theta}) - \gamma(\alpha + 2, \frac{A}{\theta})) = \theta^2 \frac{\gamma(\alpha + 2, \frac{B}{\theta}) - \gamma(\alpha + 2, \frac{A}{\theta})}{\Gamma(\alpha)}$</span>
+<span id="cb5-166"><a href="#cb5-166" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-167"><a href="#cb5-167" aria-hidden="true" tabindex="-1"></a>Note $\Gamma(\alpha + 2) = (\alpha+1) \alpha \Gamma(\alpha)$ <span class="sc">\[</span><span class="co">[</span><span class="ot">@bain1992introduction, p. 111</span><span class="co">]</span><span class="sc">\]</span>.</span>
+<span id="cb5-168"><a href="#cb5-168" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-169"><a href="#cb5-169" aria-hidden="true" tabindex="-1"></a>$\therefore \int_{A}^{B} x^2f(x)dx = \theta^2 \frac{\gamma(\alpha + 2, \frac{B}{\theta}) - \gamma(\alpha + 2, \frac{A}{\theta})}{\Gamma(\alpha+2)/(\alpha + 1)\alpha} = \theta^2(\alpha + 1)\alpha (F(B|\alpha + 2, \theta) - F(A|\alpha + 2, \theta))$</span>
+<span id="cb5-170"><a href="#cb5-170" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb5-171"><a href="#cb5-171" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-172"><a href="#cb5-172" aria-hidden="true" tabindex="-1"></a>$\therefore \int_{A}^{B} x^2f(x)dx = \theta^2 \frac{\gamma(\alpha + 2, \frac{B}{\theta}) - \gamma(\alpha + 2, \frac{A}{\theta})}{\Gamma(\alpha+2)/(\alpha + 1)\alpha} = \theta^2(\alpha + 1)\alpha (F(B|\alpha + 2, \theta) - F(A|\alpha + 2, \theta))$</span>
-<span id="cb5-173"><a href="#cb5-173" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb5-174"><a href="#cb5-174" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-175"><a href="#cb5-175" aria-hidden="true" tabindex="-1"></a><span class="fu">## Python Source Code {#sec-py-source-code}</span></span>
-<span id="cb5-176"><a href="#cb5-176" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-177"><a href="#cb5-177" aria-hidden="true" tabindex="-1"></a><span class="fu">### Module: truncated_gamma.py {#sec-truncated-gamma}</span></span>
-<span id="cb5-178"><a href="#cb5-178" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-181"><a href="#cb5-181" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb5-182"><a href="#cb5-182" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: py-TruncatedGamma</span></span>
-<span id="cb5-183"><a href="#cb5-183" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
-<span id="cb5-184"><a href="#cb5-184" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: true</span></span>
-<span id="cb5-185"><a href="#cb5-185" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-186"><a href="#cb5-186" aria-hidden="true" tabindex="-1"></a>{{<span class="op">&lt;</span> include .<span class="op">/</span>truncated_gamma.py <span class="op">&gt;</span>}}</span>
-<span id="cb5-187"><a href="#cb5-187" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-188"><a href="#cb5-188" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb5-189"><a href="#cb5-189" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-190"><a href="#cb5-190" aria-hidden="true" tabindex="-1"></a><span class="fu">### Unit Tests: test_truncated_gamma.py {#sec-test-truncated-gamma}</span></span>
-<span id="cb5-191"><a href="#cb5-191" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-194"><a href="#cb5-194" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb5-195"><a href="#cb5-195" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: py-TestTruncatedGamma</span></span>
-<span id="cb5-196"><a href="#cb5-196" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
-<span id="cb5-197"><a href="#cb5-197" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: true</span></span>
-<span id="cb5-198"><a href="#cb5-198" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-199"><a href="#cb5-199" aria-hidden="true" tabindex="-1"></a>{{<span class="op">&lt;</span> include .<span class="op">/</span>test_truncated_gamma.py <span class="op">&gt;</span>}}</span>
-<span id="cb5-200"><a href="#cb5-200" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-201"><a href="#cb5-201" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb5-202"><a href="#cb5-202" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-203"><a href="#cb5-203" aria-hidden="true" tabindex="-1"></a><span class="fu">## Session Information {#sec-sessioninfo}</span></span>
-<span id="cb5-204"><a href="#cb5-204" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-207"><a href="#cb5-207" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb5-208"><a href="#cb5-208" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: py-info</span></span>
-<span id="cb5-209"><a href="#cb5-209" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: true</span></span>
-<span id="cb5-210"><a href="#cb5-210" aria-hidden="true" tabindex="-1"></a><span class="co">#| output: true</span></span>
-<span id="cb5-211"><a href="#cb5-211" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: false</span></span>
-<span id="cb5-212"><a href="#cb5-212" aria-hidden="true" tabindex="-1"></a><span class="co">#| warning: false</span></span>
-<span id="cb5-213"><a href="#cb5-213" aria-hidden="true" tabindex="-1"></a><span class="co">#| message: false</span></span>
-<span id="cb5-214"><a href="#cb5-214" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-215"><a href="#cb5-215" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> session_info</span>
-<span id="cb5-216"><a href="#cb5-216" aria-hidden="true" tabindex="-1"></a>session_info.show()</span>
-<span id="cb5-217"><a href="#cb5-217" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb5-218"><a href="#cb5-218" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-219"><a href="#cb5-219" aria-hidden="true" tabindex="-1"></a><span class="fu"># References</span></span>
+<span id="cb5-172"><a href="#cb5-172" aria-hidden="true" tabindex="-1"></a><span class="fu">## Python Source Code {#sec-py-source-code}</span></span>
+<span id="cb5-173"><a href="#cb5-173" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-174"><a href="#cb5-174" aria-hidden="true" tabindex="-1"></a><span class="fu">### Module: truncated_gamma.py {#sec-py-truncated-gamma}</span></span>
+<span id="cb5-175"><a href="#cb5-175" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-178"><a href="#cb5-178" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb5-179"><a href="#cb5-179" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: py-TruncatedGamma</span></span>
+<span id="cb5-180"><a href="#cb5-180" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="cb5-181"><a href="#cb5-181" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: true</span></span>
+<span id="cb5-182"><a href="#cb5-182" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-183"><a href="#cb5-183" aria-hidden="true" tabindex="-1"></a>{{<span class="op">&lt;</span> include .<span class="op">/</span>truncated_gamma.py <span class="op">&gt;</span>}}</span>
+<span id="cb5-184"><a href="#cb5-184" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-185"><a href="#cb5-185" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb5-186"><a href="#cb5-186" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-187"><a href="#cb5-187" aria-hidden="true" tabindex="-1"></a><span class="fu">### Unit Tests: test_truncated_gamma.py {#sec-py-test-truncated-gamma}</span></span>
+<span id="cb5-188"><a href="#cb5-188" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-189"><a href="#cb5-189" aria-hidden="true" tabindex="-1"></a>Unit tests for the <span class="in">`truncated_gamma`</span> module are provided in the file <span class="in">`test_truncated_gamma.py`</span>.</span>
+<span id="cb5-190"><a href="#cb5-190" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-193"><a href="#cb5-193" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb5-194"><a href="#cb5-194" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: py-TestTruncatedGamma</span></span>
+<span id="cb5-195"><a href="#cb5-195" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="cb5-196"><a href="#cb5-196" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: true</span></span>
+<span id="cb5-197"><a href="#cb5-197" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-198"><a href="#cb5-198" aria-hidden="true" tabindex="-1"></a>{{<span class="op">&lt;</span> include .<span class="op">/</span>test_truncated_gamma.py <span class="op">&gt;</span>}}</span>
+<span id="cb5-199"><a href="#cb5-199" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-200"><a href="#cb5-200" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb5-201"><a href="#cb5-201" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-202"><a href="#cb5-202" aria-hidden="true" tabindex="-1"></a><span class="fu">## Session Information {#sec-sessioninfo}</span></span>
+<span id="cb5-203"><a href="#cb5-203" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-204"><a href="#cb5-204" aria-hidden="true" tabindex="-1"></a>All of the files needed to reproduce these results can be downloaded from the Git repository <span class="ot">&lt;https://github.com/wkingc/truncated-gamma-rvs-py&gt;</span>.</span>
+<span id="cb5-205"><a href="#cb5-205" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-208"><a href="#cb5-208" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb5-209"><a href="#cb5-209" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: py-info</span></span>
+<span id="cb5-210"><a href="#cb5-210" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: true</span></span>
+<span id="cb5-211"><a href="#cb5-211" aria-hidden="true" tabindex="-1"></a><span class="co">#| output: true</span></span>
+<span id="cb5-212"><a href="#cb5-212" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: false</span></span>
+<span id="cb5-213"><a href="#cb5-213" aria-hidden="true" tabindex="-1"></a><span class="co">#| warning: false</span></span>
+<span id="cb5-214"><a href="#cb5-214" aria-hidden="true" tabindex="-1"></a><span class="co">#| message: false</span></span>
+<span id="cb5-215"><a href="#cb5-215" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-216"><a href="#cb5-216" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> session_info</span>
+<span id="cb5-217"><a href="#cb5-217" aria-hidden="true" tabindex="-1"></a>session_info.show()</span>
+<span id="cb5-218"><a href="#cb5-218" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb5-219"><a href="#cb5-219" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-220"><a href="#cb5-220" aria-hidden="true" tabindex="-1"></a><span class="fu"># References</span></span>
 </code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->

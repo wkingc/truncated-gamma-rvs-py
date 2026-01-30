@@ -68,12 +68,12 @@ We can accomplish this in Python using the **`truncated_gamma`** module (source 
 
 - **`mean_target`**: Target mean of the truncated gamma distribution.
 - **`cv_target`**: Target coefficient of variation of the truncated gamma distribution.
-- **`A`**: Lower bound of the distribution.
-- **`B`**: Upper bound of the distribution.
+- **`A`**: Lower bound of the truncated gamma distribution.
+- **`B`**: Upper bound of the truncated gamma distribution.
 - **`size`**: Number of random variates to generate.
 - **`random_state`**: Seed for reproducibility.  
   - Set to an integer for consistent results.
-  - Set to `None` if reproducibility is not required
+  - Set to `None` if reproducibility is not required.
 
 ```{python}
 #| label: tgamma-rvs
@@ -169,7 +169,7 @@ $\therefore \int_{A}^{B} x^2f(x)dx = \theta^2 \frac{\gamma(\alpha + 2, \frac{B}{
 
 ## Python Source Code {#sec-py-source-code}
 
-### Module: truncated_gamma.py {#sec-truncated-gamma}
+### Module: truncated_gamma.py {#sec-py-truncated-gamma}
 
 ```{python}
 #| label: py-TruncatedGamma
@@ -180,7 +180,9 @@ $\therefore \int_{A}^{B} x^2f(x)dx = \theta^2 \frac{\gamma(\alpha + 2, \frac{B}{
 
 ```
 
-### Unit Tests: test_truncated_gamma.py {#sec-test-truncated-gamma}
+### Unit Tests: test_truncated_gamma.py {#sec-py-test-truncated-gamma}
+
+Unit tests for the `truncated_gamma` module are provided in the file `test_truncated_gamma.py`.
 
 ```{python}
 #| label: py-TestTruncatedGamma
@@ -192,6 +194,8 @@ $\therefore \int_{A}^{B} x^2f(x)dx = \theta^2 \frac{\gamma(\alpha + 2, \frac{B}{
 ```
 
 ## Session Information {#sec-sessioninfo}
+
+All of the files needed to reproduce these results can be downloaded from the Git repository <https://github.com/wkingc/truncated-gamma-rvs-py>.
 
 ```{python}
 #| label: py-info

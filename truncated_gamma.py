@@ -166,7 +166,7 @@ def truncgamma_rvs(mean_target, cv_target, A, B, size = 1, random_state = None):
         random_state (int): The seed for random number generation to create reproducible results.
      
     Returns:
-        A numpy.ndarray containing the random variates.
+        A numpy.ndarray containing the random variates from a truncated gamma distribution.
     
     Example:
         >>> x = truncgamma_rvs(mean_target = 100, cv_target = 1/2, A = 0, B = 1000, size = 10, random_state = 123)
