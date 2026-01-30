@@ -62,15 +62,12 @@ $$ {#eq-gammaTm2}
 
 # Example {#sec-example}
 
-Suppose we want to generate random variates from a **gamma distribution truncated to the interval** [0, 1000], where:
-
-- $E[X] = 100$ (mean)
-- $SD[X] = 50$ (standard deviation)
+Suppose we want to generate 100,000 random variates from a **gamma distribution truncated to the interval** [0, 1000], where the mean is 100 and the standard deviation is 1/2 the value of the mean (e.g., the coefficient of variation).
 
 We can accomplish this in Python using the **`truncated_gamma`** module (source code available in [Appendix @sec-py-source-code]).  From this module, the function **`truncgamma_rvs`** generates random variates from a truncated gamma distribution. It accepts the following arguments:
 
 - **`mean_target`**: Target mean of the truncated gamma distribution.
-- **`cv_target`**: Target coefficient of variation $CV[X] = \frac{SD[X]}{E[X]}$.
+- **`cv_target`**: Target coefficient of variation of the truncated gamma distribution.
 - **`A`**: Lower bound of the distribution.
 - **`B`**: Upper bound of the distribution.
 - **`size`**: Number of random variates to generate.
@@ -79,7 +76,7 @@ We can accomplish this in Python using the **`truncated_gamma`** module (source 
   - Set to `None` if reproducibility is not required
 
 ```{python}
-#| label: tmp
+#| label: tgamma-rvs
 #| eval: true
 #| echo: true
 #| output: true
