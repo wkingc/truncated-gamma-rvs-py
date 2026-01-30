@@ -170,7 +170,7 @@ Note $\Gamma(\alpha + 2) = (\alpha+1) \alpha \Gamma(\alpha)$ \[[@bain1992introdu
 $\therefore \int_{A}^{B} x^2f(x)dx = \theta^2 \frac{\gamma(\alpha + 2, \frac{B}{\theta}) - \gamma(\alpha + 2, \frac{A}{\theta})}{\Gamma(\alpha+2)/(\alpha + 1)\alpha} = \theta^2(\alpha + 1)\alpha (F(B|\alpha + 2, \theta) - F(A|\alpha + 2, \theta))$
 :::
 
-## Python Source Code {#sec-py-source-code} 
+## Python Source Code {#sec-py-source-code}
 
 ### Module: truncated_gamma.py {#sec-truncated-gamma}
 
