@@ -64,7 +64,7 @@ $$ {#eq-gammaTm2}
 
 Suppose we want to generate 100,000 random variates from a **gamma distribution truncated to the interval** [0, 1000], where the mean is 100 and the standard deviation is 1/2 the value of the mean (e.g., the coefficient of variation).
 
-We can accomplish this in Python using the **`truncated_gamma`** module (source code available in [Appendix @sec-py-source-code]).  From this module, the function **`truncgamma_rvs`** generates random variates from a truncated gamma distribution. It accepts the following arguments:
+We can accomplish this in Python using the **`truncated_gamma_rvs`** python package \[[@copeland2026tgammarvs]\].  From this module, the function **`truncgamma_rvs`** generates random variates from a truncated gamma distribution. It accepts the following arguments:
 
 - **`mean_target`**: Target mean of the truncated gamma distribution.
 - **`cv_target`**: Target coefficient of variation of the truncated gamma distribution.
@@ -83,7 +83,7 @@ We can accomplish this in Python using the **`truncated_gamma`** module (source 
 #| warning: false
 #| message: false
 
-from truncated_gamma import truncgamma_rvs
+from truncated_gamma_rvs import truncgamma_rvs
 import matplotlib.pyplot as plt
 
 x = truncgamma_rvs(mean_target = 100, cv_target = 1/2, A = 0, B = 1000, size = 100000, random_state = 123)
@@ -166,32 +166,6 @@ Note $\Gamma(\alpha + 2) = (\alpha+1) \alpha \Gamma(\alpha)$ \[[@bain1992introdu
 
 $\therefore \int_{A}^{B} x^2f(x)dx = \theta^2 \frac{\gamma(\alpha + 2, \frac{B}{\theta}) - \gamma(\alpha + 2, \frac{A}{\theta})}{\Gamma(\alpha+2)/(\alpha + 1)\alpha} = \theta^2(\alpha + 1)\alpha (F(B|\alpha + 2, \theta) - F(A|\alpha + 2, \theta))$
 :::
-
-## Python Source Code {#sec-py-source-code}
-
-### Module: truncated_gamma.py {#sec-py-truncated-gamma}
-
-```{python}
-#| label: py-TruncatedGamma
-#| eval: false
-#| echo: true
-
-{{< include ./truncated_gamma.py >}}
-
-```
-
-### Unit Tests: test_truncated_gamma.py {#sec-py-test-truncated-gamma}
-
-Unit tests for the `truncated_gamma` module are provided in the file `test_truncated_gamma.py`.
-
-```{python}
-#| label: py-TestTruncatedGamma
-#| eval: false
-#| echo: true
-
-{{< include ./test_truncated_gamma.py >}}
-
-```
 
 ## Session Information {#sec-sessioninfo}
 
